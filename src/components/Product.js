@@ -5,26 +5,29 @@ import styled from 'styled-components';
 const Img = styled.img`
     width: 200px;
     height: auto;
+    align-items: center;
+    margin: auto;
+
 `;
 
-const AddToCart = styled.button`
-    background-color: blue;
-    color: yellow;
-    padding: 10px;
-    margin-bottom: 10px;
-`;
+
+const ItemDiv = styled.div`
+    display: grid;
+    align-items: center;
+    text-align: center;
+`
 
 class Product extends React.Component {
 
     render() {
 
         return (
-            <div>
+            <ItemDiv>
                 <Img src={this.props.imgProduct} alt={'Imagem do produto'} />
                 <p>{this.props.nameProduct}</p>
                 <p>R$ {this.props.valueProduct}</p>
-                <AddToCart>Adicionar ao Carrinho</AddToCart>
-            </div>
+                
+            </ItemDiv>
         )
     }
 }
