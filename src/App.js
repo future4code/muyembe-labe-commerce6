@@ -3,6 +3,7 @@ import './App.css';
 import ProductGrid from './components/ProductGrid'
 import ProductCart from './components/ProductCart'
 import styled from 'styled-components';
+import ProductFilter from './components/ProductFilter'
 
 import img1 from './img/img1.jpg'
 import img2 from './img/img2.jpg';
@@ -71,8 +72,7 @@ const productList = [
 
 const AppColumns = styled.div`
   display: grid;
-  grid-template-rows: ${(props) => props.cartIsVisible ? '1fr 40px' : '1fr'};
-  grid-template-columns: ${(props) => props.cartIsVisible ? '3fr 1fr' : '1fr'};
+  grid-template-columns: ${(props) => props.cartIsVisible ? '1fr 4fr 1fr' : '1fr 5fr'};
   padding: 10px;
   gap: 20px;
 `
@@ -95,16 +95,26 @@ class App extends React.Component {
     products: productList,
     cart: [],
     isCartVisible: false,
+    filter: {
+      minValue: '',
+      maxValue: '',
+    }
   }
 
   addProductToCart = (product) => {
 
     const newProduct = {
       product: product,
-      quantity: 1
+      quantity: 0
     }
 
-    const newCart = [...this.state.cart, newProduct]
+    const newCart = [...this.state.cart]
+
+    newCart.map(itemcart => {
+      if (itemcart.product.id === newProduct.product.id) {
+        return newProduct.quantity += 1
+      } 
+    })
 
     this.setState({
       cart: newCart,
@@ -118,10 +128,11 @@ class App extends React.Component {
     const newCart = this.state.cart.filter((item) => {
       return itemId !== item.product.id
     })
-
     this.setState({
       cart: newCart
     })
+
+
 
   }
 
@@ -131,15 +142,39 @@ class App extends React.Component {
     })
   }
 
+  onChangeFilterMin = (event) =>{
+    console.log("funcao On Change min", event.target.value)
+    console.log("console log no valor minimo", this.state.filter.minValue)
+    this.setState({
+      filter:{
+        minValue: event.target.value
+      }
+    })
+  }
+
+  onChangeFilterMax = (event) =>{
+    console.log("funcao On Change max", event.target.value)
+    this.setState({
+      filter:{
+        maxValue: event.target.value
+      }
+    })
+  }
+
+  
 
 
   render() {
 
-
-
     return (
       <div>
         <AppColumns cartIsVisible={this.state.isCartVisible}>
+
+          <ProductFilter 
+            filterValues= {this.state.filter}
+            onChangeFilterMin= {this.onChangeFilterMin}
+            onChangeFilterMax ={this.onChangeFilterMax}          
+          />
 
           <ProductGrid
             products={this.state.products}
@@ -154,7 +189,7 @@ class App extends React.Component {
           )}
 
           <CartImage onClick={this.CartColumn}>
-            <img src={shoppingCart} /> 
+            <img src={shoppingCart} />
           </CartImage>
 
         </AppColumns>

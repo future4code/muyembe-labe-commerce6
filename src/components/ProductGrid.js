@@ -24,7 +24,6 @@ class ProductGrid extends React.Component {
 
         const productList = this.props.products.map((item) => {
 
-            console.log("productGrid", item)
 
             return (
                 <div>

@@ -17,7 +17,7 @@ class ProductCart extends React.Component {
 
     totalValueSum() {
         return this.props.cartContent.reduce((accum, item) => {
-            console.log("ver o que é o segundo parâmetro do reduce", item)
+            // console.log("ver o que é o segundo parâmetro do reduce", item)
             return accum + item.product.value * item.quantity
         }, 0)
     }
@@ -27,11 +27,12 @@ class ProductCart extends React.Component {
 
         const totalValue = this.totalValueSum()
         const cartItens = this.props.cartContent.map((item) => {
-
+            
+                       
             return (
                 <div>
-                    {item.quantity}x {item.product.name}
-                    <RemoveItemButton onClick={() => this.props.removeProductFromCart(item.product.id)}>X</RemoveItemButton>
+                    {item.quantity} x {item.product.name}
+                    <RemoveItemButton onClick={() => this.props.removeProductFromCart(item.product.id)}> X </RemoveItemButton>
                 </div>
             )
         })
