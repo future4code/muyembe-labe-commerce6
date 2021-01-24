@@ -2,31 +2,29 @@ import React from 'react';
 import styled from 'styled-components';
 import Product from './Product';
 
+const FilterContainer = styled.div`
+    border: 1px solid black;
+    padding: 8px;
+ `;
 
-class ProductFilter extends React.Component {
-
- state={ 
-     valorMinimo: "",
-     valorMaximo: "",
-
- }
-
+export class ProductFilter extends React.Component {
     render() {
-
-        return(
-            <div> 
-                <h1>Filtros</h1>
-                <p> Valor Mínimo</p>
-                <input type ="number" onChange = {this.props.onChangeFilterMin} value = {this.props.filterValues.minValue}/>
-                <p>Valor Máximo</p>
-                <input type ="number" onChange = {this.props.onChangeFilterMax}/>
-                <p> Busca </p>
-                <input type= "text" />
+        return <FilterContainer>
+            <h3>Filtros</h3>
+            <div>
+                Valor Mínimo
             </div>
-        )
-
+            <input type="number" onChange={this.props.onChangeMinFilter} value={this.props.minFilter} />
+            <div>
+                Valor Máximo
+            </div>
+            <input type="number" onChange={this.props.onChangeMaxFilter} value={this.props.maxFilter} />
+            <div>
+                Buscar por Nome:
+            <input type="text" onChange={this.props.onChangeNameFilter} value={this.props.nameFilter} />
+            </div>
+        </FilterContainer>
     }
-
 }
 
 export default ProductFilter

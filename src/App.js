@@ -4,6 +4,7 @@ import ProductGrid from './components/ProductGrid'
 import ProductCart from './components/ProductCart'
 import styled from 'styled-components';
 import ProductFilter from './components/ProductFilter'
+import { Products } from './components/Product';
 
 import img1 from './img/img1.jpg'
 import img2 from './img/img2.jpg';
@@ -17,7 +18,7 @@ import shoppingCart from './img/shopping-cart.png';
 
 // ------------------------   Lista de produtos da nossa loja
 
-const productList = [
+const products = [
   {
     id: 1,
     name: 'Modelo 1',
@@ -92,13 +93,11 @@ const CartImage = styled.div`
 class App extends React.Component {
 
   state = {
-    products: productList,
     cart: [],
     isCartVisible: false,
-    filter: {
-      minValue: '',
-      maxValue: '',
-    }
+    minFilter: '',
+    maxFilter: '',
+    nameFilter: ''
   }
 
   addProductToCart = (product) => {
@@ -113,15 +112,13 @@ class App extends React.Component {
     newCart.map(itemcart => {
       if (itemcart.product.id === newProduct.product.id) {
         return newProduct.quantity += 1
-      } 
+      }
     })
 
     this.setState({
       cart: newCart,
     })
-
   }
-
 
   removeProductFromCart = (itemId) => {
 
@@ -131,9 +128,6 @@ class App extends React.Component {
     this.setState({
       cart: newCart
     })
-
-
-
   }
 
   CartColumn = () => {
@@ -142,27 +136,17 @@ class App extends React.Component {
     })
   }
 
-  onChangeFilterMin = (event) =>{
-    console.log("funcao On Change min", event.target.value)
-    console.log("console log no valor minimo", this.state.filter.minValue)
-    this.setState({
-      filter:{
-        minValue: event.target.value
-      }
-    })
+  onChangeMinFilter = (event) => {
+    this.setState({ minFilter: event.target.value })
   }
 
-  onChangeFilterMax = (event) =>{
-    console.log("funcao On Change max", event.target.value)
-    this.setState({
-      filter:{
-        maxValue: event.target.value
-      }
-    })
+  onChangeMaxFilter = (event) => {
+    this.setState({ maxFilter: event.target.value })
   }
 
-  
-
+  onChangeNameFilter = (event) => {
+    this.setState({ nameFilter: event.target.value })
+  }
 
   render() {
 
@@ -170,14 +154,20 @@ class App extends React.Component {
       <div>
         <AppColumns cartIsVisible={this.state.isCartVisible}>
 
-          <ProductFilter 
-            filterValues= {this.state.filter}
-            onChangeFilterMin= {this.onChangeFilterMin}
-            onChangeFilterMax ={this.onChangeFilterMax}          
+          <ProductFilter
+            minFilter={this.state.minFilter}
+            maxFilter={this.state.maxFilter}
+            nameFilter={this.state.nameFilter}
+            onChangeMinFilter={this.onChangeMinFilter}
+            onChangeMaxFilter={this.onChangeMaxFilter}
+            onChangeNameFilter={this.onChangeNameFilter}
           />
 
-          <ProductGrid
-            products={this.state.products}
+          <Products
+            products={products}
+            minFilter={this.state.minFilter}
+            maxFilter={this.state.maxFilter}
+            nameFilter={this.state.nameFilter}
             addProductToCart={this.addProductToCart}
           />
 
