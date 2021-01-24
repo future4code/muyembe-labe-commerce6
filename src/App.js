@@ -94,8 +94,8 @@ class App extends React.Component {
     products: productList,
     isCartVisible: false,
     filter: {
-      minFilter: '',
-      maxFilter: '',
+      minFilter: '10',
+      maxFilter: '100',
       nameFilter: '',
     },
     cart: [],
@@ -183,6 +183,7 @@ class App extends React.Component {
 
 
   onChangeFilterMax = (event) => {
+    console.log(event.target.value)
     this.setState({
       filter: {
         maxValue: event.target.value
@@ -193,7 +194,9 @@ class App extends React.Component {
 
   onChangeNameFilter = (event) => {
     this.setState({
-      nameFilter: event.target.value
+      filter: {
+        nameFilter: event.target.value
+      }
     })
   }
 

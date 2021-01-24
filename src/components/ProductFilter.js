@@ -26,7 +26,7 @@ class ProductFilter extends React.Component {
                 </label>
                 <label>
                     Busca
-                <input type="text"  value={this.props.filterValues.nameFilter} />
+                <input type="text" onChange = {this.props.onChangeNameFilter} value={this.props.filterValues.nameFilter} />
                 </label>
             </FiltersContainer>
         )
