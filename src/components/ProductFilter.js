@@ -3,26 +3,32 @@ import styled from 'styled-components';
 import Product from './Product';
 
 
+
+const FiltersContainer = styled.div`
+  border: 1px solid black;
+  padding: 8px;
+`
+
 class ProductFilter extends React.Component {
-
- state={ 
-     valorMinimo: "",
-     valorMaximo: "",
-
- }
 
     render() {
 
-        return(
-            <div> 
-                <h1>Filtros</h1>
-                <p> Valor Mínimo</p>
-                <input type ="number" onChange = {this.props.onChangeFilterMin} value = {this.props.filterValues.minValue}/>
-                <p>Valor Máximo</p>
-                <input type ="number" onChange = {this.props.onChangeFilterMax}/>
-                <p> Busca </p>
-                <input type= "text" />
-            </div>
+        return (
+            <FiltersContainer>
+                <h2>Filtros</h2>
+                <label>
+                    Valor Mínimo
+                <input type="number" onChange={this.props.onChangeFilterMin} value={this.props.filterValues.minFilter} min="0" />
+                </label>
+                <label>
+                    Valor Máximo
+                <input type="number" onChange={this.props.onChangeFilterMax} value={this.props.filterValues.maxFilter} min="0" />
+                </label>
+                <label>
+                    Busca
+                <input type="text"  value={this.props.filterValues.nameFilter} />
+                </label>
+            </FiltersContainer>
         )
 
     }
