@@ -4,7 +4,6 @@ import ProductGrid from './components/ProductGrid'
 import ProductCart from './components/ProductCart'
 import styled from 'styled-components';
 import ProductFilter from './components/ProductFilter'
-import { Products } from './components/Product';
 
 import img1 from './img/img1.jpg'
 import img2 from './img/img2.jpg';
@@ -18,7 +17,7 @@ import shoppingCart from './img/shopping-cart.png';
 
 // ------------------------   Lista de produtos da nossa loja
 
-const products = [
+const productList = [
   {
     id: 1,
     name: 'Modelo 1',
@@ -69,7 +68,6 @@ const products = [
   },
 ]
 
-//------- Colunas da loja: as colunas mudam dependendo se o carrinho está visível ou não
 
 const AppColumns = styled.div`
   display: grid;
@@ -93,60 +91,112 @@ const CartImage = styled.div`
 class App extends React.Component {
 
   state = {
-    cart: [],
+    products: productList,
     isCartVisible: false,
-    minFilter: '',
-    maxFilter: '',
-    nameFilter: ''
+    filter: {
+      minFilter: '',
+      maxFilter: '',
+      nameFilter: '',
+    },
+    cart: [],
   }
 
-  addProductToCart = (product) => {
+  onAddProductToCart = (product) => {
 
-    const newProduct = {
-      product: product,
-      quantity: 0
-    }
+    const productInCart = this.state.cart.find(item => item.id === product.id)
+    // Nessa primeira linha verificamos se o produto já esta no carrinho. 
+    // Se o elemento é encontrado o find retorna o elemento e se não é retorna undefined
 
-    const newCart = [...this.state.cart]
+    // Se o produto estiver no carrinho: eu aumento 1 na sua quantidade deixando os outros dados inalterados
+    if (productInCart) {
+      const newproductInCart = this.state.cart.map((itemInCart) => {
+        if (itemInCart.id === product.id) {
+          return { ...itemInCart, quantity: itemInCart.quantity + 1 }
+        }
+        return itemInCart
 
-    newCart.map(itemcart => {
-      if (itemcart.product.id === newProduct.product.id) {
-        return newProduct.quantity += 1
+      })
+
+      this.setState({ cart: newproductInCart })
+
+      // Se o produto não estiver no carrinho, crio um novo produto, adiciono ele em um novo carrinho (newCart) e mudo o state para esse newCart
+    } else {
+
+      const newProduct = {
+        id: product.id,
+        name: product.name,
+        value: product.value,
+        img: product.img,
+        quantity: 1
       }
-    })
 
-    this.setState({
-      cart: newCart,
-    })
+      const newCart = [...this.state.cart, newProduct]
+
+      this.setState({
+        cart: newCart,
+      })
+
+    }
   }
 
-  removeProductFromCart = (itemId) => {
+  onRemoveProductFromCart = (itemId) => {
 
-    const newCart = this.state.cart.filter((item) => {
-      return itemId !== item.product.id
-    })
-    this.setState({
-      cart: newCart
-    })
+    //Nossa lógica antiga (seguindo o vídeo de adicionar e remover post)
+
+    // const newCart = this.state.cart.filter((item) => {
+    //   return itemId !== item.id
+    // })
+    // this.setState({
+    //   cart: newCart
+    // })
+
+    // lógica nova seguindo vídeo do Darvas
+    const newProductsInCart = this.state.cart.map((itemInCart) => {
+      if (itemInCart.id === itemId) {
+        return {
+          ...itemInCart,
+          quantity: itemInCart.quantity - 1
+        }
+      }
+      return itemInCart
+    }).filter((itemInCart) => itemInCart.quantity > 0)
+
+    this.setState({ cart: newProductsInCart })
   }
+
 
   CartColumn = () => {
     this.setState({
       isCartVisible: !this.state.isCartVisible,
     })
+    
   }
 
-  onChangeMinFilter = (event) => {
-    this.setState({ minFilter: event.target.value })
+
+  onChangeFilterMin = (event) => {
+    this.setState({
+      filter: {
+        minValue: event.target.value
+      }
+    })
   }
 
-  onChangeMaxFilter = (event) => {
-    this.setState({ maxFilter: event.target.value })
+
+  onChangeFilterMax = (event) => {
+    this.setState({
+      filter: {
+        maxValue: event.target.value
+      }
+    })
   }
+
 
   onChangeNameFilter = (event) => {
-    this.setState({ nameFilter: event.target.value })
+    this.setState({
+      nameFilter: event.target.value
+    })
   }
+
 
   render() {
 
@@ -155,26 +205,22 @@ class App extends React.Component {
         <AppColumns cartIsVisible={this.state.isCartVisible}>
 
           <ProductFilter
-            minFilter={this.state.minFilter}
-            maxFilter={this.state.maxFilter}
-            nameFilter={this.state.nameFilter}
-            onChangeMinFilter={this.onChangeMinFilter}
-            onChangeMaxFilter={this.onChangeMaxFilter}
+            filterValues={this.state.filter}
+            onChangeFilterMin={this.onChangeFilterMin}
+            onChangeFilterMax={this.onChangeFilterMax}
             onChangeNameFilter={this.onChangeNameFilter}
           />
 
-          <Products
-            products={products}
-            minFilter={this.state.minFilter}
-            maxFilter={this.state.maxFilter}
-            nameFilter={this.state.nameFilter}
-            addProductToCart={this.addProductToCart}
+          <ProductGrid
+            products={this.state.products}
+            onAddProductToCart={this.onAddProductToCart}
+            filterValues={this.state.filter}
           />
 
           {this.state.isCartVisible && (
             <ProductCart
               cartContent={this.state.cart}
-              removeProductFromCart={this.removeProductFromCart}
+              removeProductFromCart={this.onRemoveProductFromCart}
             />
           )}
 

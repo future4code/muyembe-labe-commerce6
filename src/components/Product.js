@@ -1,7 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ProductCart } from './ProductCart';
-import { ProductCard } from './ProductCard'
 
 
 const Img = styled.img`
@@ -12,40 +10,35 @@ const Img = styled.img`
 
 `;
 
-// const ItemDiv = styled.div`
-//     display: grid;
-//     align-items: center;
-//     text-align: center;
-// `
 
-const ProductsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  padding: 16px;
-  `
+const ItemDiv = styled.div`
+    display: grid;
+    align-items: center;
+    text-align: center;
+`
 
-export class Products extends React.Component {
+const AddToCart = styled.button`
+    background-color: blue;
+    color: yellow;
+    padding: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+`;
 
-    getFilteredList = () => {
-        return this.props.products
-            .filter((product) => this.props.maxFilter ? product.price < this.props.maxFilter : true)
-            .filter((product) => this.props.minFilter ? product.price > this.props.minFilter : true)
-            .filter((product) => this.props.nameFilter ? product.name.includes(this.props.nameFilter) : true)
-    }
+class Product extends React.Component {
 
     render() {
-        const filteredList = this.getFilteredList()
 
-        return <ProductsGrid>
-        {filteredList.map((products) => {
-          return <ProductCard product={products}/>
-        })}
-      </ProductsGrid>
-        }
+        return (
+            <ItemDiv>
+                <Img src={this.props.product.img} alt={'Imagem do produto'} />
+                <p>{this.props.product.name}</p>
+                <p>R$ {this.props.product.value}</p>
+                <AddToCart onClick={() => this.props.onAddProductToCart(this.props.product)}>Adicionar ao carrinho</AddToCart>
+                
+            </ItemDiv>
+        )
     }
+}
 
-
-export default Products
-
-
+export default Product
